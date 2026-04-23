@@ -1,0 +1,11 @@
+# Build artifacts (keep pre-built DLLs for verified games)
+*.o
+*.obj
+
+# macOS
+.DS_Store
+
+# Editor
+*.swp
+*.swo
+*~
