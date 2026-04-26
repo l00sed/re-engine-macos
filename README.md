@@ -47,6 +47,8 @@ game.exe                       decode_server.sh
 
 ## Quick Start
 
+https://github.com/user-attachments/assets/cc338b94-3d17-496b-8490-ba4a42a7e4df
+
 ```bash
 # Clone this repo
 git clone https://github.com/l00sed/re-engine-macos.git
