@@ -47,6 +47,8 @@ game.exe                       decode_server.sh
 
 ## Quick Start
 
+![Screen Recording](./media/screen-recording.mp4)
+
 ```bash
 # Clone this repo
 git clone https://github.com/l00sed/re-engine-macos.git
