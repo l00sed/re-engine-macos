@@ -12,7 +12,7 @@
 #   ./decode_server.sh --prefix <PREFIX> [--drive-c PATH] [--ffmpeg PATH]
 #
 # The --prefix flag is required and must match the GAME_PREFIX used to build
-# the shim DLL (e.g. "re3", "re8").
+# the shim DLL (e.g. "re2", "re3", "re7").
 #
 set -uo pipefail
 

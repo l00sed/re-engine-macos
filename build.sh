@@ -10,7 +10,7 @@
 #
 # Usage: ./build.sh <game>
 #   e.g. ./build.sh re3
-#        ./build.sh re8
+#        ./build.sh re7
 #
 set -euo pipefail
 

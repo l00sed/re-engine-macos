@@ -6,11 +6,9 @@ Fixes broken cutscene/intro video playback for RE Engine games running on macOS 
 
 | Game | Status | Pre-built DLL | Notes |
 |------|--------|---------------|-------|
+| Resident Evil 2 (2019) | Untested | Yes | PCGamingWiki confirms MF-related cutscene issues |
 | Resident Evil 3 (2020) | Verified | Yes | Tested on M3 Pro, CrossOver 26.1.0 |
-| Resident Evil Village / RE8 (2021) | Verified | Yes | Tested on M3 Pro, CrossOver 26.1.0 |
-| Resident Evil 7 (2017) | Untested | No | Has native macOS port; this is for Steam/Windows via CrossOver |
-| Resident Evil 2 (2019) | Untested | No | PCGamingWiki confirms MF-related cutscene issues |
-| Resident Evil 4 (2023) | Untested | No | Has native macOS port; this is for Steam/Windows via CrossOver |
+| Resident Evil 7 (2017) | Untested | Yes | Has native macOS port; this is for Steam/Windows via CrossOver |
 
 **Verified** = tested and confirmed working. **Untested** = should work (same engine, same MF pipeline) but hasn't been tested. The install script will warn you before proceeding with untested games.
 
@@ -54,20 +52,16 @@ https://github.com/user-attachments/assets/cc338b94-3d17-496b-8490-ba4a42a7e4df
 git clone https://github.com/l00sed/re-engine-macos.git
 cd re-engine-macos
 
-# Install for a verified game (pre-built DLL included)
+# Install for RE3 (verified, pre-built DLL included)
 ./install.sh re3
+
+# Install for RE2 or RE7 (pre-built DLL included, will warn "untested")
+./install.sh re2
 # or
-./install.sh re8
+./install.sh re7
 
 # That's it. Launch the game from Steam normally.
 # The decode server starts and stops automatically via launchd.
-```
-
-For untested games, build the DLL first:
-
-```bash
-./build.sh re7        # or re2, re4
-./install.sh re7      # will warn "untested", prompt to continue
 ```
 
 ### Custom Bottle Name
@@ -84,7 +78,7 @@ If your bottle isn't named "Steam":
 If you prefer to manage the decode server yourself instead of using launchd:
 
 ```bash
-./play.sh re8   # starts decode server, launches game, cleans up on exit
+./play.sh re3   # starts decode server, launches game, cleans up on exit
 ```
 
 ## Installation Details
@@ -95,8 +89,8 @@ If you prefer to manage the decode server yourself instead of using launchd:
 2. **Sets DLL overrides** in the Wine bottle:
    - `mfplat` = `native,builtin`
    - `mfreadwrite` = `native,builtin`
-3. **Sets environment variables** (game-specific, if any -- e.g. RE8 needs `D3DM_ENABLE_METALFX=0` and `DXMT_ENABLE_NVEXT=0`)
-4. **Disables CrashReport.exe** (game-specific, if needed -- e.g. RE8)
+3. **Sets environment variables** (game-specific, if any)
+4. **Disables CrashReport.exe** (game-specific, if needed)
 5. **Installs a launchd agent** -- auto-starts the decode server when the game runs (triggered by a flag file the shim creates on load)
 
 ## Building from Source
@@ -124,17 +118,16 @@ The DLL is parameterized by `GAME_PREFIX` at compile time. All file paths (bin d
 ├── play.sh                       # Manual launch with decode server
 ├── build.sh                      # Build DLL for a game
 ├── games/
+│   ├── re2.conf                  # RE2 config (untested, pre-built DLL included)
 │   ├── re3.conf                  # RE3 config (verified)
-│   ├── re8.conf                  # RE8 config (verified)
-│   ├── re7.conf                  # RE7 config (untested)
-│   ├── re2.conf                  # RE2 config (untested)
-│   └── re4.conf                  # RE4 config (untested)
+│   └── re7.conf                  # RE7 config (untested, pre-built DLL included)
 ├── shim/
 │   ├── mfreadwrite_shim.c        # Shared shim DLL source (~1170 lines)
 │   ├── mfreadwrite.def           # DLL export definitions
 │   └── out/
+│       ├── re2/mfreadwrite.dll   # Pre-built DLL for RE2
 │       ├── re3/mfreadwrite.dll   # Pre-built DLL for RE3
-│       └── re8/mfreadwrite.dll   # Pre-built DLL for RE8
+│       └── re7/mfreadwrite.dll   # Pre-built DLL for RE7
 └── scripts/
     └── decode_server.sh          # Parameterized decode server
 ```
@@ -144,7 +137,7 @@ The DLL is parameterized by `GAME_PREFIX` at compile time. All file paths (bin d
 1. Create `games/<id>.conf` following the existing pattern (see `games/re3.conf` as a template)
 2. Set `GAME_DIR_NAME` to the exact folder name in `steamapps/common/`
 3. Set `GAME_EXE` to the game's main executable
-4. Set `GAME_PREFIX` to a short unique prefix (e.g. `re2`)
+4. Set `GAME_PREFIX` to a short unique prefix (e.g. `re9`)
 5. Build the DLL: `./build.sh <id>`
 6. Install: `./install.sh <id>`
 7. Test and update `STATUS` to `verified` if it works
@@ -161,19 +154,12 @@ The decode server logs to `~/Library/Logs/<game>-decode-server.log`.
 ## Uninstalling
 
 ```bash
+./uninstall.sh re2
 ./uninstall.sh re3
-./uninstall.sh re8
+./uninstall.sh re7
 ```
 
 This removes the launchd agent, shim DLL, temp files, and restores CrashReport.exe if it was disabled. DLL overrides and environment variables are left in the bottle config (remove manually via CrossOver's Wine Configuration if needed).
-
-## RE8 Users: Breaking Change
-
-If you previously used [re8-village-macos](https://github.com/l00sed/re8-village-macos), the file naming convention has changed:
-- `movie_*.bin` -> `re8_movie_*.bin`
-- `mf_shim_debug.log` -> `mf_shim_re8_debug.log`
-
-**Uninstall the old version first** before installing from this repo.
 
 ## Technical Background
 

@@ -17,7 +17,7 @@
 #
 # Usage: ./install.sh <game> [--bottle NAME] [--crossover PATH]
 #   e.g. ./install.sh re3
-#        ./install.sh re8 --bottle "My Bottle"
+#        ./install.sh re7 --bottle "My Bottle"
 #
 set -euo pipefail
 

@@ -12,7 +12,7 @@
 #
 # Usage: ./play.sh <game> [--bottle NAME] [--crossover PATH]
 #   e.g. ./play.sh re3
-#        ./play.sh re8 --bottle "My Bottle"
+#        ./play.sh re7 --bottle "My Bottle"
 #
 set -euo pipefail
 

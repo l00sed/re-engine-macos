@@ -8,7 +8,7 @@
 #
 # Usage: ./uninstall.sh <game> [--bottle NAME]
 #   e.g. ./uninstall.sh re3
-#        ./uninstall.sh re8 --bottle "My Bottle"
+#        ./uninstall.sh re7 --bottle "My Bottle"
 #
 set -euo pipefail
 
